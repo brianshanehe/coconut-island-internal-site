@@ -1,0 +1,80 @@
+{% extends "BasePage/base.html" %}
+
+{% block title %}
+<title>Device Transfer</title>
+{% endblock %}
+
+
+{% block mediator %}
+
+<div>
+    Device Transfer
+    <hr>
+    <form>
+        <table>
+            <tr>
+                <td>
+                    Game:
+                </td>
+                <td>
+                    <select name="bucket-name">
+                        {% for bucket in buckets %}
+                            <p>{{bucket[0]}}</p>
+                            {% if bucket[0] in permissions %}
+                                <option value={{bucket[0]}}>{{bucket[1]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        {% if not permissions %}
+                            <option value=""></option>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Source User ID：
+                </td>
+                <td>
+                    <input type="type" name="source-id">
+                </td>
+                <td>
+                    Source User Version：
+                </td>
+                <td>
+                    <input type="type" name="source-ver">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Target User ID：
+                </td>
+                <td>
+                    <input type="type" name="target-id">
+                </td>
+                <td>
+                    Target User Version：
+                </td>
+                <td>
+                    <input type="type" name="target-ver">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="backup" value="true">Restoring backup account<br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="submit" formmethod="post" value="Submit Button">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br/>
+<div>
+    {% if info %}
+    {{ info }}
+    {% endif %}
+</div>
+{% endblock %}

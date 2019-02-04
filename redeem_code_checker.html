@@ -1,0 +1,68 @@
+{% extends "BasePage/base.html" %}
+
+{% block title %}
+<title>Redeem Code Checker</title>
+{% endblock %}
+
+
+{% block mediator %}
+
+<div>
+    Redeem Code Checker
+    <hr>
+    <form>
+        <table>
+            <tr>
+                <td>
+                    Game:
+                </td>
+                <td>
+                    <select name="game-prefix">
+                        {% for game in game_names %}
+                            {% if game[0] in permissions %}
+                                <option value={{game[0]}}>{{game[1]}}({{game[0]}})</option>
+                            {% endif %}
+                        {% endfor %}
+                        {% if not permissions %}
+                            <option value=""></option>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Code：
+                </td>
+                <td>
+                    <input type="type" name="redeem-code">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="submit" formmethod="post" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br/>
+<div>
+{% if contents %}
+    <table>
+    {% for key in contents %}
+    <tr>
+        <td>
+            {{ key }}
+        </td>
+        <td>
+            {{ contents[key] }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+{% if info %}
+{{ info }}
+{% endif %}
+</div>
+{% endblock %}

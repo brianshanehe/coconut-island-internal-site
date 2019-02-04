@@ -1,0 +1,88 @@
+{% extends "BasePage/base.html" %}
+
+{% block title %}
+<title>Payment Csv Tool</title>
+{% endblock %}
+
+
+{% block mediator %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  $( document ).ready(function() {
+    $('form').on('submit', function(event) {
+      event.preventDefault();
+      var formData = new FormData($('form')[0]);
+      if ($('#file2')[0].files[0]){
+        var filename=$('#file2')[0].files[0].name;
+      }
+      else {
+        $('#csv-reader-link').html("<div>No file selected</div>");
+        return;
+      }
+      if (filename != filename.replace(/[^a-zA-Z0-9_\-\.]/gi, '')){
+        $('#csv-reader-link').html("<div>Make sure there are no special characters in the filename</div>");
+        return;
+      }
+      if (filename.split('.').slice(-1) == 'csv'){
+        $.ajax({
+          xhr : function() {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener('progress', function(e) {
+              if (e.lengthComputable) {
+                var percent = Math.round((e.loaded / e.total) * 100);
+                $('#progressField').html("<div>Upload Percent: " + percent + "%</div>");
+              }
+            });
+            return xhr;
+          },
+          type : 'POST',
+          url : '/payment_csv_tool',
+          data : formData,
+          processData : false,
+          contentType : false,
+          success : function() {
+            var my_url="{{ url_for('payment_csv_reader', uploaded_csv="") }}" + filename;
+            $('#csv-reader-link').html("<a href=" + my_url + ">" + filename + "</a>");
+          }
+        });
+      }
+      else {
+        $('#progressField').html("<div></div>");
+        $('#csv-reader-link').html("<div>Not a csv file: " + filename + "</div>");
+      }
+    });
+  });
+</script>
+
+<div>
+  Payment Csv Tool
+  <hr>
+</div>
+<table>
+  <tr>
+    <form method="post" enctype="multipart/form-data" id="form">
+      <div>
+        <label for="file2">Choose file to upload</label>
+        <input type="file" id="file2" name="file3">
+      </div>
+      <div>
+        <button type="submit" name="submit" value="Submit Button" id="submit">Submit</button>
+      </div>
+    </form>
+  </tr>
+</table>
+<div class="progress">
+  <br/>
+  <div id="progressField"></div>
+</div>
+<div>
+  <div id="csv-reader-link">
+  </div>
+</div>
+<div>
+  {% if info %}
+  {{ info }}
+  {% endif %}
+</div>
+{% endblock %}

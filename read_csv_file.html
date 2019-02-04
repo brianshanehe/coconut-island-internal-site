@@ -1,0 +1,97 @@
+{% extends "BasePage/base.html" %}
+
+{% block title %}
+<title>Payment Csv Reader</title>
+{% endblock %}
+
+
+{% block mediator %}
+<div>
+  Payment Csv Reader
+  <hr>
+</div>
+<form>
+    <table>
+        <tr>
+            <td>
+                Game:
+            </td>
+            <td>
+                <select name="game-name">
+                    <option value="All Games">All Games</option>
+                    {% for game in games %}
+                        <option value={{game}}>{{game}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Channel:
+            </td>
+            <td>
+                <select name="channel-name">
+                    <option value="All Channels">All Channels</option>
+                    {% for channel in channels %}
+                        <option value={{channel}}>{{channel}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Time Frame:
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Start: (default {{ start_date }}):
+            </td>
+            <td>
+                <input type="type" name="start-date">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                End: (default {{ end_date }}):
+            </td>
+            <td>
+                <input type="type" name="end-date">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" formmethod="post" name="submit" value="Submit">Submit</button>
+            </td>
+            <td>
+                <button type="submit" formmethod="post"  name="submit" value="Clear">Clear</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" formmethod="post"  name="submit" value="Download">Download Filtered Csv</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<br/>
+<table>
+    <tr>{{ first_line }}</tr>
+{% if contents %}
+    {% for content in contents %}
+        <tr>
+            {% for cell in content %}
+            <td>
+                {{ cell }}
+            </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+{% endif %}
+</table>
+<div>
+  {% if info %}
+  {{ info }}
+  {% endif %}
+</div>
+{% endblock %}
